@@ -17,11 +17,12 @@ from milvus import default_server as milvus_server
 
 class RAG:
     def __init__(self, 
-                 doc_path: str = "Coach 5 Vulnerability Scan.pdf",
+                 doc_path: str,
                  number_of_retrievals: int = 1,
                  max_chat_tokens: int = 3097,
                  model_name: str = "gpt-4",
                  creative: float = 0.7) -> None:
+        self.pages = []
         self.__model = self.__set_llm_model(model_name, creative)
         self.__doc_path = self.__get_uploaded_doc(doc_path)
         self.__retriever = self.__set_retriever(k=number_of_retrievals)
@@ -32,15 +33,15 @@ class RAG:
     
     def __get_uploaded_doc(self, doc_path: str) -> list:
         print("Fetching Uploaded Doc")
-        global pages
+        # global pages
         loader = PyPDFLoader(doc_path)
-        pages = loader.load_and_split()
-        return pages[0].page_content
+        self.pages = loader.load_and_split()
+        return self.pages[0].page_content
 
     def __set_retriever(self, k: int = 1):
         #Using Milvus Vector Data Store
         embeddings = OpenAIEmbeddings()
-        store_vector = Chroma.from_documents(pages, 
+        store_vector = Chroma.from_documents(self.pages, 
                                              embedding=embeddings,
                                              persist_directory=".",
                                             )
@@ -55,7 +56,7 @@ class RAG:
             ),
         ]
 
-        document_content_description = "Uploaded_Interaction_Documents"
+        document_content_description = "Uploaded_Interaction_Document"
 
         _retriever = SelfQueryRetriever.from_llm(
             self.__model,
