@@ -2,6 +2,8 @@ from models.basic_model import RAG
 from UI.upload_app import Streamlit_Upload_App
 from models.recursive_model import RAG_Recursive
 
+st_uploader_app = Streamlit_Upload_App()
+
 # rag = RAG(
 #     doc_path = 'docs/CAN_CIOSC_104_2021.pdf',
 #     number_of_retrievals = 1,
@@ -9,9 +11,7 @@ from models.recursive_model import RAG_Recursive
 #     creative = 1.5
 # )
 
-st_uploader_app = Streamlit_Upload_App()
-
-print("\nType 'exit' to exit the program.")
+# print("\nType 'exit' to exit the program.")
 # while True:
 #     question = str(input("Question: "))
 #     print('')
