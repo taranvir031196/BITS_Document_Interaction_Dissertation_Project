@@ -1,5 +1,6 @@
 from evaluate_answer_GPT.gpt_evaluator import GPT_Evaluator
 from models.basic_model import RAG
+import json
 import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, storage
@@ -21,7 +22,8 @@ class Streamlit_Upload_App:
         #     self.rag = st.session_state.rag
         #     self.prompt = st.session_state.prompt
         if not firebase_admin._apps:
-            cred = credentials.Certificate("documate-ai-88b721abe941.json")
+            key_dict = json.loads(st.secrets["firebase_service_account"])
+            cred = credentials.Certificate(key_dict)
             firebase_admin.initialize_app(cred, {
                 'storageBucket': 'documate-ai.appspot.com'  # Replace with your storage bucket
         })
