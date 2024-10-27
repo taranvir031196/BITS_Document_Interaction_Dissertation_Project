@@ -52,7 +52,7 @@ class RAG:
     
     def set_retriever(self, chunks: List[Document], k: int = 1):
         sharing_mode = st.secrets["STREAMLIT_SHARING_MODE"]
-        store_vector = None  # or appropriate default value
+       # store_vector = None  # or appropriate default value
 
         if sharing_mode:
             CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
