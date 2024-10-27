@@ -55,7 +55,7 @@ class RAG:
         store_vector = None  # or appropriate default value
 
         if sharing_mode:
-            CHROMA_PATH = "/tmp/chroma"  # Use /tmp for Streamlit Cloud
+            CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
         else:
             CHROMA_PATH = "chroma_db"
 
