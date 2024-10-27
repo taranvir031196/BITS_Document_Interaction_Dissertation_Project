@@ -59,6 +59,7 @@ class RAG:
         else:
             CHROMA_PATH = "chroma_db"
 
+        os.makedirs(CHROMA_PATH, exist_ok=True)
         # Debug info
         st.write(f"Storage path: {CHROMA_PATH}")
         st.write(f"Number of chunks: {len(chunks)}")
