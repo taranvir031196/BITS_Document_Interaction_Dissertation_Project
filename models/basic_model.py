@@ -51,7 +51,8 @@ class RAG:
         return chunks
     
     def set_retriever(self, chunks: List[Document], k: int = 1):
-        if 'STREAMLIT_SHARING_MODE' in os.environ:
+        sharing_mode = st.secrets["STREAMLIT_SHARING_MODE"]
+        if sharing_mode:
             CHROMA_PATH = "/tmp/chroma"  # Use /tmp for Streamlit Cloud
         else:
             CHROMA_PATH = "chroma_db"
