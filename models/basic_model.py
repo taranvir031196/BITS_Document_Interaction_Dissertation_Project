@@ -50,6 +50,10 @@ class RAG:
         return chunks
     
     def set_retriever(self, chunks: List[Document], k: int = 1):
+        if 'STREAMLIT_SHARING_MODE' in os.environ:
+            CHROMA_PATH = "/tmp/chroma"  # Use /tmp for Streamlit Cloud
+        else:
+            CHROMA_PATH = "chroma_db" 
        # Using Chroma Vector Store
         embeddings = OpenAIEmbeddings()
         # store_vector = FAISS.from_documents(
