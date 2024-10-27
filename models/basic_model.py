@@ -52,6 +52,8 @@ class RAG:
     
     def set_retriever(self, chunks: List[Document], k: int = 1):
         sharing_mode = st.secrets["STREAMLIT_SHARING_MODE"]
+        store_vector = None  # or appropriate default value
+
         if sharing_mode:
             CHROMA_PATH = "/tmp/chroma"  # Use /tmp for Streamlit Cloud
         else:
@@ -76,6 +78,7 @@ class RAG:
             st.error(f"Connection error occurred: {str(e)}")
             # Add logging if needed
             print(f"Error details: {e}")
+            store_vector = None  # or appropriate default value
         # Self-Querying Retriever
         metadata_field_info = [
             AttributeInfo(
