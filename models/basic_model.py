@@ -53,7 +53,11 @@ class RAG:
         if 'STREAMLIT_SHARING_MODE' in os.environ:
             CHROMA_PATH = "/tmp/chroma"  # Use /tmp for Streamlit Cloud
         else:
-            CHROMA_PATH = "chroma_db" 
+            CHROMA_PATH = "chroma_db"
+
+        # Debug info
+        st.write(f"Storage path: {CHROMA_PATH}")
+        st.write(f"Number of chunks: {len(chunks)}")
        # Using Chroma Vector Store
         embeddings = OpenAIEmbeddings()
         # store_vector = FAISS.from_documents(
