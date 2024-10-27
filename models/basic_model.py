@@ -81,7 +81,7 @@ class RAG:
             
             # Check and create index if needed
             if index_name not in pc.list_indexes().names():
-                pinecone.Pinecone.create_index(
+                pc.create_index(
                     name=index_name,
                     dimension=1536,  # OpenAI embeddings dimension
                     metric='cosine'
@@ -89,6 +89,7 @@ class RAG:
                 st.write(f"Created new Pinecone index: {index_name}")
             # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
+            st.write(f"embeddings initialized properly: {embeddings}")
             store_vector = LangchainPinecone.from_documents(
                 documents=chunks,
                 embedding=embeddings,
