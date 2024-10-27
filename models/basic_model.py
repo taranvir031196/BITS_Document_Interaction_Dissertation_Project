@@ -72,8 +72,24 @@ class RAG:
             # Access secrets
             PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
             PINECONE_ENVIRONMENT = st.secrets["ENVIRONMENT"]
-            # Initialize Pinecone
-            pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
+            # Initialize Pinecone V2 client
+            pc = Pinecone(
+                api_key=st.secrets["PINECONE_API_KEY"]
+            )
+            index_name = 'streamlit-index'
+            
+            # Check and create index if needed
+            if index_name not in pc.list_indexes().names():
+                pc.create_index(
+                    name=index_name,
+                    dimension=1536,  # OpenAI embeddings dimension
+                    metric='cosine',
+                    spec=ServerlessSpec(
+                        cloud='aws',
+                        region='us-west-2'
+                    )
+                )
+                st.write(f"Created new Pinecone index: {index_name}")
             # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
             store_vector = Pinecone.from_documents(
