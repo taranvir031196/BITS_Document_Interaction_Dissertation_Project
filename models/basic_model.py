@@ -73,12 +73,12 @@ class RAG:
             #     embedding=embeddings,
             # )
             st.write("embeddings initialized properly")
-            with tempfile.TemporaryDirectory() as temp_dir:
-                sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-                store_vector = FAISS.from_documents(
-                    documents=chunks,
-                    embedding=embeddings
-                )
+            # with tempfile.TemporaryDirectory() as temp_dir:
+                # sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+            store_vector = FAISS.from_documents(
+                documents=chunks,
+                embedding=embeddings
+            )
                 # Initialize Chroma with persistence
                 # store_vector = Chroma.from_documents(
                 #     documents=chunks,
