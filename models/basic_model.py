@@ -95,7 +95,7 @@ class RAG:
             store_vector = LangchainPinecone.from_existing_index(
                 index_name=index_name,
                 embedding=embeddings,
-                namespace="streamlit-index"   # Replace with your Pinecone index name
+                namespace="default"   # Replace with your Pinecone index name
             )
             store_vector.add_documents(chunks)
             # store_vector = FAISS.from_documents(
