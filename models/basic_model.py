@@ -72,11 +72,14 @@ class RAG:
             #     chunks, 
             #     embedding=embeddings,
             # )
+            st.write("embeddings initialized properly")
             store_vector = Chroma.from_documents(
                 chunks, 
                 embedding=embeddings,
                 persist_directory=CHROMA_PATH,
             )
+            st.write("chunks stored to vector store")
+
             # Self-Querying Retriever
             metadata_field_info = [
                 AttributeInfo(
@@ -95,8 +98,6 @@ class RAG:
             # retriever = store_vector.as_retriever(search_kwargs={"k": k})
     
             # return retriever
-    
-    
             _retriever = SelfQueryRetriever.from_llm(
                 self.__model,
                 store_vector,
@@ -104,6 +105,7 @@ class RAG:
                 metadata_field_info,
                 search_kwargs={"k": k}
             )
+            st.write("_retriever set properly")
             return _retriever
         except Exception as e:
             st.error(f"Connection error occurred: {str(e)}")
