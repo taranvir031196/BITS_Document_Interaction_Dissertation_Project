@@ -91,9 +91,9 @@ class RAG:
             embeddings = OpenAIEmbeddings()
             st.write(f"embeddings initialized properly: {embeddings}")
             store_vector = LangchainPinecone.from_existing_index(
-                documents=chunks,
+                index_name=index_name,
                 embedding=embeddings,
-                index_name="streamlit-index"  # Replace with your Pinecone index name
+                namespace="streamlit-index"   # Replace with your Pinecone index name
             )
             store_vector.add_documents(chunks)
             # store_vector = FAISS.from_documents(
