@@ -101,7 +101,7 @@ class RAG:
                 metadata_field_info,
                 search_kwargs={"k": k}
             )
-        return _retriever
+            return _retriever
         except Exception as e:
             st.error(f"Connection error occurred: {str(e)}")
             # Add logging if needed
