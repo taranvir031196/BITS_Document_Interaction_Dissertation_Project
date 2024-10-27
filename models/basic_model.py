@@ -74,39 +74,39 @@ class RAG:
                 embedding=embeddings,
                 persist_directory=CHROMA_PATH,
             )
+            # Self-Querying Retriever
+            metadata_field_info = [
+                AttributeInfo(
+                    name="source",
+                    description="The path of directories where the document is found",
+                    type="string",
+                ),
+            ]
+    
+            document_content_description = "Uploaded_Interaction_Document"
+    
+            # Save the FAISS index
+            # store_vector.save_local("faiss_index")
+    
+            # # Create a retriever from the vector store
+            # retriever = store_vector.as_retriever(search_kwargs={"k": k})
+    
+            # return retriever
+    
+    
+            _retriever = SelfQueryRetriever.from_llm(
+                self.__model,
+                store_vector,
+                document_content_description,
+                metadata_field_info,
+                search_kwargs={"k": k}
+            )
         except Exception as e:
             st.error(f"Connection error occurred: {str(e)}")
             # Add logging if needed
             print(f"Error details: {e}")
             store_vector = None  # or appropriate default value
-        # Self-Querying Retriever
-        metadata_field_info = [
-            AttributeInfo(
-                name="source",
-                description="The path of directories where the document is found",
-                type="string",
-            ),
-        ]
-
-        document_content_description = "Uploaded_Interaction_Document"
-
-        # Save the FAISS index
-        # store_vector.save_local("faiss_index")
-
-        # # Create a retriever from the vector store
-        # retriever = store_vector.as_retriever(search_kwargs={"k": k})
-
-        # return retriever
-
-
-        _retriever = SelfQueryRetriever.from_llm(
-            self.__model,
-            store_vector,
-            document_content_description,
-            metadata_field_info,
-            search_kwargs={"k": k}
-        )
-
+        
         return _retriever
     
     def get_relevant_excerpt(self, retriever, query):
