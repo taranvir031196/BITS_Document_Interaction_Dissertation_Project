@@ -60,18 +60,22 @@ class RAG:
         # Debug info
         st.write(f"Storage path: {CHROMA_PATH}")
         st.write(f"Number of chunks: {len(chunks)}")
-       # Using Chroma Vector Store
-        embeddings = OpenAIEmbeddings()
-        # store_vector = FAISS.from_documents(
-        #     chunks, 
-        #     embedding=embeddings,
-        # )
-        store_vector = Chroma.from_documents(
-            chunks, 
-            embedding=embeddings,
-            persist_directory=CHROMA_PATH,
-        )
-
+        try:
+           # Using Chroma Vector Store
+            embeddings = OpenAIEmbeddings()
+            # store_vector = FAISS.from_documents(
+            #     chunks, 
+            #     embedding=embeddings,
+            # )
+            store_vector = Chroma.from_documents(
+                chunks, 
+                embedding=embeddings,
+                persist_directory=CHROMA_PATH,
+            )
+        except Exception as e:
+            st.error(f"Connection error occurred: {str(e)}")
+            # Add logging if needed
+            print(f"Error details: {e}")
         # Self-Querying Retriever
         metadata_field_info = [
             AttributeInfo(
@@ -83,7 +87,7 @@ class RAG:
 
         document_content_description = "Uploaded_Interaction_Document"
 
-           # Save the FAISS index
+        # Save the FAISS index
         # store_vector.save_local("faiss_index")
 
         # # Create a retriever from the vector store
