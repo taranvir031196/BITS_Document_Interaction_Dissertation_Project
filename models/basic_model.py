@@ -55,16 +55,12 @@ class RAG:
         sharing_mode = st.secrets["STREAMLIT_SHARING_MODE"]
         store_vector = None  # or appropriate default value
         
-        if sharing_mode:
-            CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
-        else:
-            CHROMA_PATH = "chroma_db"
+        # if sharing_mode:
+        #     CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
+        # else:
+        #     CHROMA_PATH = "chroma_db"
 
-        os.makedirs(CHROMA_PATH, exist_ok=True)
-        if os.path.exists(CHROMA_PATH):
-            # Debug info
-            # st.write(f"Storage path: {CHROMA_PATH}")
-            # st.write(f"Number of chunks: {len(chunks)}")
+        # os.makedirs(CHROMA_PATH, exist_ok=True)
                 
         try:
             # Initialize Pinecone
