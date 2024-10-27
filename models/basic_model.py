@@ -2,7 +2,7 @@ __import__('pysqlite3')
 import sys
 import os
 import streamlit as st
-import pinecone
+from pinecone import Pinecone
 import tempfile
 from dotenv import load_dotenv
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -19,7 +19,7 @@ from langchain.document_loaders import PyPDFLoader
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain.vectorstores.milvus import Milvus
 from langchain.vectorstores.chroma import Chroma
-from langchain.vectorstores.pinecone import Pinecone
+from langchain.vectorstores import Pinecone as LangchainPinecone  # Note this import
 from langchain_core.prompts import MessagesPlaceholder
 from langchain.vectorstores.faiss import FAISS
 from typing import List, Dict, Any
@@ -74,13 +74,13 @@ class RAG:
             PINECONE_ENVIRONMENT = st.secrets["ENVIRONMENT"]
             # Initialize Pinecone V2 client
             # pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
-            pinecone.Pinecone(api_key=PINECONE_API_KEY)
+            pc = Pinecone(api_key=PINECONE_API_KEY)
             # pc = pinecone.Client() 
             
             index_name = 'streamlit-index'
             
             # Check and create index if needed
-            if index_name not in pinecone.Pinecone.list_indexes().names():
+            if index_name not in pc.list_indexes().names():
                 pinecone.Pinecone.create_index(
                     name=index_name,
                     dimension=1536,  # OpenAI embeddings dimension
@@ -89,7 +89,7 @@ class RAG:
                 st.write(f"Created new Pinecone index: {index_name}")
             # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
-            store_vector = pinecone.Pinecone.from_documents(
+            store_vector = LangchainPinecone.from_documents(
                 documents=chunks,
                 embedding=embeddings,
                 index_name="streamlit-index"  # Replace with your Pinecone index name
