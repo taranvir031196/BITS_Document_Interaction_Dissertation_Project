@@ -6,6 +6,8 @@ import firebase_admin
 from firebase_admin import credentials, storage
 import time
 import os
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 class Streamlit_Upload_App:
 
