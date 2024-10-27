@@ -63,7 +63,7 @@ class RAG:
         store_vector = Chroma.from_documents(
             chunks, 
             embedding=embeddings,
-            persist_directory="./chroma_db",
+            persist_directory=CHROMA_PATH,
         )
 
         # Self-Querying Retriever
