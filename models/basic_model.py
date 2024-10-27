@@ -101,13 +101,12 @@ class RAG:
                 metadata_field_info,
                 search_kwargs={"k": k}
             )
+        return _retriever
         except Exception as e:
             st.error(f"Connection error occurred: {str(e)}")
             # Add logging if needed
             print(f"Error details: {e}")
             store_vector = None  # or appropriate default value
-        
-        return _retriever
     
     def get_relevant_excerpt(self, retriever, query):
         docs = retriever.get_relevant_documents(query)
