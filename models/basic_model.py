@@ -54,17 +54,17 @@ class RAG:
         sharing_mode = st.secrets["STREAMLIT_SHARING_MODE"]
        # store_vector = None  # or appropriate default value
 
-        # if sharing_mode:
-        #     CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
-        # else:
-        #     CHROMA_PATH = "chroma_db"
+        if sharing_mode:
+            CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
+        else:
+            CHROMA_PATH = "chroma_db"
 
-        # os.makedirs(CHROMA_PATH, exist_ok=True)
-        # if os.path.exists(CHROMA_PATH):
-        #     # Debug info
-        # st.write(f"Storage path: {CHROMA_PATH}")
-        st.write(f"Number of chunks: {len(chunks)}")
-            
+        os.makedirs(CHROMA_PATH, exist_ok=True)
+        if os.path.exists(CHROMA_PATH):
+            # Debug info
+            st.write(f"Storage path: {CHROMA_PATH}")
+            st.write(f"Number of chunks: {len(chunks)}")
+                
         try:
            # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
@@ -72,19 +72,18 @@ class RAG:
             #     chunks, 
             #     embedding=embeddings,
             # )
-            st.write(f"embeddings initialized properly: {embeddings}")
+            # st.write(f"embeddings initialized properly: {embeddings}")
             # with tempfile.TemporaryDirectory() as temp_dir:
                 # sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-            store_vector = FAISS.from_documents(
-                documents=chunks,
-                embedding=embeddings
-            )
-            # Initialize Chroma with persistence
-            # store_vector = Chroma.from_documents(
+            # store_vector = FAISS.from_documents(
             #     documents=chunks,
-            #     embedding=embeddings,
-            #     persist_directory=temp_dir  # Add persistence directory
+            #     embedding=embeddings
             # )
+            # Initialize Chroma with persistence
+            store_vector = Chroma.from_documents(
+                documents=chunks,
+                embedding=embeddings,
+            )
             # If you need to persist the store
             # store_vector.persist()
             # store_vector = Chroma.from_documents(
