@@ -73,7 +73,8 @@ class RAG:
             PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
             PINECONE_ENVIRONMENT = st.secrets["ENVIRONMENT"]
             # Initialize Pinecone V2 client
-            pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
+            # pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
+            pinecone.Pinecone(api_key=PINECONE_API_KEY)
             
             index_name = 'streamlit-index'
             
