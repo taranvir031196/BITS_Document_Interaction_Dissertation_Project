@@ -17,7 +17,7 @@ from langchain_openai.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader 
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain.vectorstores.milvus import Milvus
-from langchain.vectorstores.chroma import Chroma
+# from langchain.vectorstores.chroma import Chroma
 from langchain_core.prompts import MessagesPlaceholder
 from langchain.vectorstores.faiss import FAISS
 from typing import List, Dict, Any
@@ -54,16 +54,16 @@ class RAG:
         sharing_mode = st.secrets["STREAMLIT_SHARING_MODE"]
        # store_vector = None  # or appropriate default value
 
-        if sharing_mode:
-            CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
-        else:
-            CHROMA_PATH = "chroma_db"
+        # if sharing_mode:
+        #     CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
+        # else:
+        #     CHROMA_PATH = "chroma_db"
 
-        os.makedirs(CHROMA_PATH, exist_ok=True)
-        if os.path.exists(CHROMA_PATH):
-            # Debug info
-            st.write(f"Storage path: {CHROMA_PATH}")
-            st.write(f"Number of chunks: {len(chunks)}")
+        # os.makedirs(CHROMA_PATH, exist_ok=True)
+        # if os.path.exists(CHROMA_PATH):
+        #     # Debug info
+        #     st.write(f"Storage path: {CHROMA_PATH}")
+        #     st.write(f"Number of chunks: {len(chunks)}")
             
         try:
            # Using Chroma Vector Store
@@ -79,12 +79,12 @@ class RAG:
                 documents=chunks,
                 embedding=embeddings
             )
-                # Initialize Chroma with persistence
-                # store_vector = Chroma.from_documents(
-                #     documents=chunks,
-                #     embedding=embeddings,
-                #     persist_directory=temp_dir  # Add persistence directory
-                # )
+            # Initialize Chroma with persistence
+            # store_vector = Chroma.from_documents(
+            #     documents=chunks,
+            #     embedding=embeddings,
+            #     persist_directory=temp_dir  # Add persistence directory
+            # )
             # If you need to persist the store
             # store_vector.persist()
             # store_vector = Chroma.from_documents(
