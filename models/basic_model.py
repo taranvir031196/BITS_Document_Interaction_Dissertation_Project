@@ -73,10 +73,19 @@ class RAG:
             #     embedding=embeddings,
             # )
             st.write("embeddings initialized properly")
-            store_vector = Chroma.from_documents(
-                chunks, 
-                embedding=embeddings,
-            )
+            with tempfile.TemporaryDirectory() as temp_dir:
+                # Initialize Chroma with persistence
+                store_vector = Chroma.from_documents(
+                    documents=chunks,
+                    embedding=embeddings,
+                    persist_directory=temp_dir  # Add persistence directory
+                )
+            # If you need to persist the store
+            store_vector.persist()
+            # store_vector = Chroma.from_documents(
+            #     chunks, 
+            #     embedding=embeddings,
+            # )
             st.write("chunks stored to vector store")
 
             # Self-Querying Retriever
