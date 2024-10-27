@@ -1,6 +1,5 @@
 __import__('pysqlite3')
 import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import os
 import streamlit as st
 import tempfile
@@ -75,6 +74,7 @@ class RAG:
             # )
             st.write("embeddings initialized properly")
             with tempfile.TemporaryDirectory() as temp_dir:
+                sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
                 # Initialize Chroma with persistence
                 store_vector = Chroma.from_documents(
                     documents=chunks,
