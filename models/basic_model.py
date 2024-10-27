@@ -70,7 +70,7 @@ class RAG:
         try:
             # Initialize Pinecone
             # Access secrets
-            PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
+            PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"].strip()
             PINECONE_ENVIRONMENT = st.secrets["ENVIRONMENT"]
             # Initialize Pinecone V2 client
             # pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
@@ -90,11 +90,12 @@ class RAG:
             # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
             st.write(f"embeddings initialized properly: {embeddings}")
-            store_vector = LangchainPinecone.from_documents(
+            store_vector = LangchainPinecone.from_existing_index(
                 documents=chunks,
                 embedding=embeddings,
                 index_name="streamlit-index"  # Replace with your Pinecone index name
             )
+            store_vector.add_documents(chunks)
             # store_vector = FAISS.from_documents(
             #     chunks, 
             #     embedding=embeddings,
