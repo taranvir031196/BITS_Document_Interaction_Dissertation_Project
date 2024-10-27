@@ -17,7 +17,8 @@ from langchain_openai.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader 
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain.vectorstores.milvus import Milvus
-# from langchain.vectorstores.chroma import Chroma
+from langchain.vectorstores.chroma import Chroma
+from langchain.vectorstores.pinecone import Pinecone
 from langchain_core.prompts import MessagesPlaceholder
 from langchain.vectorstores.faiss import FAISS
 from typing import List, Dict, Any
@@ -66,8 +67,15 @@ class RAG:
             st.write(f"Number of chunks: {len(chunks)}")
                 
         try:
+           # Initialize Pinecone
+            pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment="ENVIRONMENT")
            # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
+            store_vector = Pinecone.from_documents(
+                documents=chunks,
+                embedding=embeddings,
+                index_name="streamlit-index"  # Replace with your Pinecone index name
+            )
             # store_vector = FAISS.from_documents(
             #     chunks, 
             #     embedding=embeddings,
@@ -80,10 +88,10 @@ class RAG:
             #     embedding=embeddings
             # )
             # Initialize Chroma with persistence
-            store_vector = Chroma.from_documents(
-                documents=chunks,
-                embedding=embeddings,
-            )
+            # store_vector = Chroma.from_documents(
+            #     documents=chunks,
+            #     embedding=embeddings,
+            # )
             # If you need to persist the store
             # store_vector.persist()
             # store_vector = Chroma.from_documents(
