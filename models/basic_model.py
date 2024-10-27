@@ -63,8 +63,8 @@ class RAG:
         os.makedirs(CHROMA_PATH, exist_ok=True)
         if os.path.exists(CHROMA_PATH):
             # Debug info
-            st.write(f"Storage path: {CHROMA_PATH}")
-            st.write(f"Number of chunks: {len(chunks)}")
+            # st.write(f"Storage path: {CHROMA_PATH}")
+            # st.write(f"Number of chunks: {len(chunks)}")
                 
         try:
             # Initialize Pinecone
@@ -84,7 +84,7 @@ class RAG:
                 st.write(f"Created new Pinecone index: {index_name}")
             # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
-            st.write(f"embeddings initialized properly: {embeddings}")
+            # st.write(f"embeddings initialized properly: {embeddings}")
             store_vector = LangchainPinecone.from_existing_index(
                 index_name=index_name,
                 embedding=embeddings,
@@ -112,7 +112,7 @@ class RAG:
                 metadata_field_info,
                 search_kwargs={"k": k}
             )
-            st.write("_retriever set properly")
+            # st.write("_retriever set properly")
             return _retriever
         except Exception as e:
             st.error(f"Connection error occurred: {str(e)}")
