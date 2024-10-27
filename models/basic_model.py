@@ -60,9 +60,11 @@ class RAG:
             CHROMA_PATH = "chroma_db"
 
         os.makedirs(CHROMA_PATH, exist_ok=True)
-        # Debug info
-        st.write(f"Storage path: {CHROMA_PATH}")
-        st.write(f"Number of chunks: {len(chunks)}")
+        if os.path.exists(CHROMA_PATH):
+            # Debug info
+            st.write(f"Storage path: {CHROMA_PATH}")
+            st.write(f"Number of chunks: {len(chunks)}")
+            
         try:
            # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
