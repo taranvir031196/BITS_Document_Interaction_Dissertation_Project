@@ -54,7 +54,6 @@ class RAG:
     def set_retriever(self, chunks: List[Document], k: int = 1):
         sharing_mode = st.secrets["STREAMLIT_SHARING_MODE"]
         store_vector = None  # or appropriate default value
-        pinecone = None
         
         if sharing_mode:
             CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
@@ -68,9 +67,9 @@ class RAG:
             st.write(f"Number of chunks: {len(chunks)}")
                 
         try:
-           # Initialize Pinecone
+            # Initialize Pinecone
             pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment=st.secrets["ENVIRONMENT"])
-           # Using Chroma Vector Store
+            # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
             store_vector = Pinecone.from_documents(
                 documents=chunks,
