@@ -62,8 +62,8 @@ class RAG:
         # os.makedirs(CHROMA_PATH, exist_ok=True)
         # if os.path.exists(CHROMA_PATH):
         #     # Debug info
-        #     st.write(f"Storage path: {CHROMA_PATH}")
-        #     st.write(f"Number of chunks: {len(chunks)}")
+        st.write(f"Storage path: {CHROMA_PATH}")
+        st.write(f"Number of chunks: {len(chunks)}")
             
         try:
            # Using Chroma Vector Store
@@ -72,7 +72,7 @@ class RAG:
             #     chunks, 
             #     embedding=embeddings,
             # )
-            st.write("embeddings initialized properly")
+            st.write(f"embeddings initialized properly: {embeddings}")
             # with tempfile.TemporaryDirectory() as temp_dir:
                 # sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
             store_vector = FAISS.from_documents(
