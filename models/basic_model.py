@@ -30,9 +30,6 @@ class RAG:
                  model_name: str = "gpt-4",
                  creative: float = 1.5) -> None:
             self.__model = self.__set_llm_model(model_name, creative)
-            # chunks = self.__get_uploaded_doc(doc_path)
-            # self.__retriever = self.__set_retriever(chunks, k=number_of_retrievals)
-            # self.__chat_history = self.__set_chat_history(max_token_limit=max_chat_tokens)
 
     def __set_llm_model(self, model_name = "gpt-4", temperature: float = 0.7):
         openai_api_key = st.secrets["OPENAI_API_KEY"].strip()
@@ -74,11 +71,7 @@ class RAG:
             # Access secrets
             PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"].strip()
             PINECONE_ENVIRONMENT = st.secrets["ENVIRONMENT"]
-            # Initialize Pinecone V2 client
-            # pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
             pc = Pinecone(api_key=PINECONE_API_KEY)
-            # pc = pinecone.Client() 
-            
             index_name = 'streamlit-index'
             
             # Check and create index if needed
@@ -98,28 +91,6 @@ class RAG:
                 namespace="default"   # Replace with your Pinecone index name
             )
             store_vector.add_documents(chunks)
-            # store_vector = FAISS.from_documents(
-            #     chunks, 
-            #     embedding=embeddings,
-            # )
-            # st.write(f"embeddings initialized properly: {embeddings}")
-            # with tempfile.TemporaryDirectory() as temp_dir:
-                # sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-            # store_vector = FAISS.from_documents(
-            #     documents=chunks,
-            #     embedding=embeddings
-            # )
-            # Initialize Chroma with persistence
-            # store_vector = Chroma.from_documents(
-            #     documents=chunks,
-            #     embedding=embeddings,
-            # )
-            # If you need to persist the store
-            # store_vector.persist()
-            # store_vector = Chroma.from_documents(
-            #     chunks, 
-            #     embedding=embeddings,
-            # )
             st.write("chunks stored to vector store")
 
             # Self-Querying Retriever
@@ -132,12 +103,6 @@ class RAG:
             ]
     
             document_content_description = "Uploaded_Interaction_Document"
-    
-            # Save the FAISS index
-            # store_vector.save_local("faiss_index")
-    
-            # # Create a retriever from the vector store
-            # retriever = store_vector.as_retriever(search_kwargs={"k": k})
     
             # return retriever
             _retriever = SelfQueryRetriever.from_llm(
