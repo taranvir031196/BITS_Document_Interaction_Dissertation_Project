@@ -76,7 +76,6 @@ class RAG:
             store_vector = Chroma.from_documents(
                 chunks, 
                 embedding=embeddings,
-                persist_directory=CHROMA_PATH,
             )
             st.write("chunks stored to vector store")
 
