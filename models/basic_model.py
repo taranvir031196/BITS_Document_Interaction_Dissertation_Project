@@ -35,6 +35,8 @@ class RAG:
             # self.__chat_history = self.__set_chat_history(max_token_limit=max_chat_tokens)
 
     def __set_llm_model(self, model_name = "gpt-4", temperature: float = 0.7):
+        openai_api_key = st.secrets["OPENAI_API_KEY"].strip()
+        os.environ["OPENAI_API_KEY"] = openai_api_key
         return ChatOpenAI(model_name=model_name, temperature=temperature)
     
     def get_uploaded_doc(self, doc_path: str) -> List[Document]:
