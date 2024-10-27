@@ -68,7 +68,7 @@ class RAG:
                 
         try:
            # Initialize Pinecone
-            pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment="ENVIRONMENT")
+            pinecone.init(api_key=st.secrets["PINECONE_API_KEY"], environment=st.secrets["ENVIRONMENT"])
            # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
             store_vector = Pinecone.from_documents(
