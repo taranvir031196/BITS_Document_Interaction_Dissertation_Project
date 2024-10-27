@@ -87,7 +87,7 @@ class RAG:
                 namespace="default"   # Replace with your Pinecone index name
             )
             store_vector.add_documents(chunks)
-            st.write("chunks stored to vector store")
+            # st.write("chunks stored to vector store")
 
             # Self-Querying Retriever
             metadata_field_info = [
