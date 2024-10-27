@@ -2,6 +2,7 @@ __import__('pysqlite3')
 import sys
 import os
 import streamlit as st
+import pinecone
 import tempfile
 from dotenv import load_dotenv
 from langchain_text_splitters import RecursiveCharacterTextSplitter
