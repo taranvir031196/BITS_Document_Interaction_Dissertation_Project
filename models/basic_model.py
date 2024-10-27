@@ -79,7 +79,7 @@ class RAG:
             index_name = 'streamlit-index'
             
             # Check and create index if needed
-            if index_name not in pinecone.list_indexes().names():
+            if index_name not in pinecone.Pinecone.list_indexes().names():
                 pc.create_index(
                     name=index_name,
                     dimension=1536,  # OpenAI embeddings dimension
