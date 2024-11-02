@@ -300,7 +300,7 @@ class Streamlit_Upload_App:
         # Path to the PDF (can be a URL or local file path)
         pdf_url = pdf_file
         # Use an iframe to embed the PDF in Streamlit
-        pdf_display = f'<iframe src={pdf_url} width="100%" height="1000" type="application/pdf"></iframe>'
+        pdf_display = f'<iframe src="https://docs.google.com/viewer?url={pdf_url}&embedded=true" width="100%" height="1000" type="application/pdf"></iframe>'
         # Display the PDF in Streamlit
         st.components.v1.html(pdf_display, height=1000)
 
