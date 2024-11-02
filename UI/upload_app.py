@@ -48,8 +48,9 @@ class Streamlit_Upload_App:
     
     def _initalize_page_navigation(self, page_navigation=None):
         if page_navigation is None:
+            st.sidebar.title(f"Welcome:")
+            st.sidebar.text(f"{repr(self.decoded_token['email'])}")
             st.sidebar.title("DocuMate Navigation")
-            st.sidebar.text(f"Welcome: {repr(self.decoded_token['email'])}")
         # Define pages
         pages = ["DocuMate AI", "DocuMate Chatbot"]
         # Select a page
