@@ -46,6 +46,7 @@ class Streamlit_Upload_App:
         st.markdown(f'<p style="background-color:#d1f6cb;color:{color};font-size:16px;border-radius:15px;padding: 1%;font-weight: bold;">{message}</p>', unsafe_allow_html=True)
     
     def _initalize_page_navigation(self, page_navigation=None):
+        st.sidebar.button('Refresh')
         if page_navigation is None:
             st.sidebar.title("DocuMate Navigation")
         # Define pages
@@ -68,7 +69,6 @@ class Streamlit_Upload_App:
             st.session_state.page = 'DocuMate Chatbot'
             st.title("DocuMate Upload")
             self.create_fileUploader_Section()
-        st.sidebar.button('Refresh')
         st.sidebar.button('Logout')
             # Refresh button
         if st.sidebar.button('Refresh'):
