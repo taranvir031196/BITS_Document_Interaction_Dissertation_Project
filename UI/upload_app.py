@@ -29,21 +29,6 @@ class Streamlit_Upload_App:
         })
         self.set_page_config()
         self._initalize_page_navigation()
-        # Get the token from the URL
-        query_params = st.experimental_get_query_params()
-        id_token = query_params.get("token", [None])[0]
-        if id_token:
-            try:
-                # Verify the ID token
-                decoded_token = auth.verify_id_token(id_token)
-                st.session_state.user = decoded_token  # Store user information in session state
-                st.success(f"Logged in as: {decoded_token['email']}")
-            except Exception as e:
-                st.error("Invalid session. Please log in again.")
-                st.stop()
-        else:
-            st.warning("No session token found. Please log in via DocuMate Login.")
-            st.stop()
 
     # Function to upload file to Firebase
     def upload_to_firebase(self, uploaded_file):
@@ -148,6 +133,21 @@ class Streamlit_Upload_App:
             page_icon="📄",
             layout="wide"
         )
+        # Get the token from the URL
+        query_params = st.experimental_get_query_params()
+        id_token = query_params.get("token", [None])[0]
+        if id_token:
+            try:
+                # Verify the ID token
+                decoded_token = auth.verify_id_token(id_token)
+                st.session_state.user = decoded_token  # Store user information in session state
+                st.success(f"Logged in as: {decoded_token['email']}")
+            except Exception as e:
+                st.error("Invalid session. Please log in again.")
+                st.stop()
+        else:
+            st.warning("No session token found. Please log in via DocuMate Login.")
+            st.stop()
     
         # Custom CSS to set background color
         st.markdown(
