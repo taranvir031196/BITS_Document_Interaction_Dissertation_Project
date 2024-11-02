@@ -83,7 +83,14 @@ class Streamlit_Upload_App:
             for key in list(st.session_state.user.keys()):
                 del st.session_state.user[key]
             login_url = "https://documate-ai.web.app/"
-            st.markdown(f'<meta http-equiv="refresh" content="0; url={login_url}">', unsafe_allow_html=True)
+            js = f"""
+                <script>
+                    window.top.location.href = '{login_url}';
+                </script>
+                """
+            st.components.v1.html(js, height=0)
+            # login_url = "https://documate-ai.web.app/"
+            # st.markdown(f'<meta http-equiv="refresh" content="0; url={login_url}">', unsafe_allow_html=True)
             
             # Custom styled buttons with HTML and CSS
         st.sidebar.markdown(
