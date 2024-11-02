@@ -88,7 +88,7 @@ class Streamlit_Upload_App:
         if st.sidebar.button("Logout"):
             for key in list(st.session_state.user.keys()):
                 del st.session_state.user[key]
-            st.experimental_rerun()  # Refresh the app to reflect logout
+            st.rerun()  # Refresh the app to reflect logout
 
         # if logout_clicked:
         #     for key in list(st.session_state.keys()):
