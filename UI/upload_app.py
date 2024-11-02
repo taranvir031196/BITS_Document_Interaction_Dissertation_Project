@@ -475,7 +475,7 @@ class Streamlit_Upload_App:
                 # Add assistant response to chat history
                 st.session_state.messages.append({"role": "", "content": evaluation})
 
-    def typewriter(self, content: str, speed: float = 5):
+    def typewriter(self, content: str, speed: float = 10):
         """
         Display content with a typewriter effect in Streamlit.
         :param content: The content to be displayed (str, int, float, etc.)
