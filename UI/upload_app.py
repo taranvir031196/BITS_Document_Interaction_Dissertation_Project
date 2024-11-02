@@ -3,7 +3,7 @@ from document_processor.pdf_processor import RAG
 import json
 import streamlit as st
 import firebase_admin
-from firebase_admin import credentials, storage
+from firebase_admin import credentials, storage, auth
 import time
 import os
 
@@ -27,6 +27,21 @@ class Streamlit_Upload_App:
             firebase_admin.initialize_app(cred, {
                 'storageBucket': 'documate-ai.appspot.com'  # Replace with your storage bucket
         })
+        # Get the token from the URL
+        query_params = st.experimental_get_query_params()
+        id_token = query_params.get("token", [None])[0]
+        if id_token:
+            try:
+                # Verify the ID token
+                decoded_token = auth.verify_id_token(id_token)
+                st.session_state.user = decoded_token  # Store user information in session state
+                st.success(f"Logged in as: {decoded_token['email']}")
+            except Exception as e:
+                st.error("Invalid session. Please log in again.")
+                st.stop()
+        else:
+            st.warning("No session token found. Please log in via DocuMate Login.")
+            st.stop()
         self.set_page_config()
         self._initalize_page_navigation()
 
@@ -80,6 +95,11 @@ class Streamlit_Upload_App:
             '<button class="custom-button-logout">Logout</button>',
             unsafe_allow_html=True
         )
+
+        if logout_clicked:
+            for key in list(st.session_state.keys()):
+                    del st.session_state[key]
+            st.experimental_rerun()
         
             # Custom styled buttons with HTML and CSS
         st.sidebar.markdown(
