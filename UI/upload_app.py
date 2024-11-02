@@ -69,9 +69,9 @@ class Streamlit_Upload_App:
             st.title("DocuMate Upload")
             self.create_fileUploader_Section()
 
-        st.sidebar.button('Refresh')
-        
-        st.sidebar.button('Logout')
+        st.sidebar.button('Refresh', key='refresh')
+
+        st.sidebar.button('Logout', key='logout')
             # Refresh button
         if st.sidebar.button('Refresh'):
             st.experimental_rerun()  # Refresh the app
