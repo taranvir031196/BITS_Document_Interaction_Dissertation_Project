@@ -3,7 +3,6 @@ import sys
 import os
 import streamlit as st
 from pinecone import Pinecone
-import tempfile
 from dotenv import load_dotenv
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 load_dotenv(encoding="utf-8")
@@ -54,14 +53,7 @@ class RAG:
     def set_retriever(self, chunks: List[Document], k: int = 1):
         sharing_mode = st.secrets["STREAMLIT_SHARING_MODE"]
         store_vector = None  # or appropriate default value
-        
-        # if sharing_mode:
-        #     CHROMA_PATH = "/tmp/chroma_db"  # Use /tmp for Streamlit Cloud
-        # else:
-        #     CHROMA_PATH = "chroma_db"
-
-        # os.makedirs(CHROMA_PATH, exist_ok=True)
-                
+                 
         try:
             # Initialize Pinecone
             # Access secrets

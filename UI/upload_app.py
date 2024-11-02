@@ -329,8 +329,10 @@ class Streamlit_Upload_App:
 
                 self.rag_initialized = True  # Set the flag to True
                 print("RAG instance initialized.")
+                st.write("RAG instance initialized.")
             else:
                 print("RAG instance already exists.")
+                st.write("RAG instance already exists.")
                 # print(st.session_state.chunks)
             
             self.initialize_ChatHistoryAndChatInterface()
