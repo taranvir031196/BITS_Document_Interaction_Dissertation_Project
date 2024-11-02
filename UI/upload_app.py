@@ -71,10 +71,10 @@ class Streamlit_Upload_App:
             self.create_fileUploader_Section()
             
         # Create the Logout button
-        logout_clicked = st.sidebar.markdown(
-            '<button class="custom-button-logout">Logout</button>',
-            unsafe_allow_html=True
-        )
+        # logout_clicked = st.sidebar.markdown(
+        #     '<button class="custom-button-logout">Logout</button>',
+        #     unsafe_allow_html=True
+        # )
 
         st.sidebar.title(f"User:")
         st.sidebar.text(f"{repr(self.decoded_token['email'])}")
@@ -84,17 +84,9 @@ class Streamlit_Upload_App:
                 del st.session_state.user[key]
             # Local development URL with port
             login_url = "https://documate-ai.web.app/"  # Adjust port number as needed
-            js = f"""
-                <script>
-                    window.location.href = '{login_url}';
-                </script>
-                """
-            st.components.v1.html(js)
 
-        # if logout_clicked:
-        #     for key in list(st.session_state.keys()):
-        #             del st.session_state[key]
-        #     st.experimental_rerun()
+            # This will change the current page URL to the login_url
+            st.experimental_set_query_params(next=login_url)
         
             # Custom styled buttons with HTML and CSS
         st.sidebar.markdown(
