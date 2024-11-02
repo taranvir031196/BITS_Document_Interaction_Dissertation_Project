@@ -118,10 +118,11 @@ class Streamlit_Upload_App:
                 text-align: center;
                 display: inline-block;
                 font-size: 16px;
-                margin: 5px 2px;
                 cursor: pointer;
                 width: 100%;
                 border-radius: 5px;
+                margin-top: 206px;
+                margin-right: 2px
             }
             .custom-button-logout:hover {
                 background-color: #006699;
