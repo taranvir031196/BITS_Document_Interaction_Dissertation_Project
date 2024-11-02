@@ -48,6 +48,7 @@ class Streamlit_Upload_App:
     def _initalize_page_navigation(self, page_navigation=None):
         if page_navigation is None:
             st.sidebar.title("DocuMate Navigation")
+            st.sidebar.text("Welcome: repr(decoded_token['email'])")
         # Define pages
         pages = ["DocuMate AI", "DocuMate Chatbot"]
         # Select a page
@@ -141,7 +142,7 @@ class Streamlit_Upload_App:
                 # Verify the ID token
                 decoded_token = auth.verify_id_token(id_token)
                 st.session_state.user = decoded_token  # Store user information in session state
-                st.success(f"Logged in as: {decoded_token['email']}")
+                # st.success(f"Logged in as: {decoded_token['email']}")
             except Exception as e:
                 st.error("Invalid session. Please log in again.")
                 st.stop()
