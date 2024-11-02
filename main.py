@@ -1,6 +1,4 @@
-from models.basic_model import RAG
 from UI.upload_app import Streamlit_Upload_App
-from models.recursive_model import RAG_Recursive
 
 st_uploader_app = Streamlit_Upload_App()
 

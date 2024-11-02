@@ -1,5 +1,5 @@
 from evaluate_answer_GPT.gpt_evaluator import GPT_Evaluator
-from models.basic_model import RAG
+from document_processor.pdf_processor import RAG
 import json
 import streamlit as st
 import firebase_admin
