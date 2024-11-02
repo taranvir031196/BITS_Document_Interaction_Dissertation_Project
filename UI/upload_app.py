@@ -15,6 +15,7 @@ class Streamlit_Upload_App:
         self.gpt_Evaluator = None
         self.prompt = None
         self.rag_initialized = False  # New flag to track RAG initialization
+        self.decoded_token = None
         if 'uploaded_file' not in st.session_state:
             st.session_state.uploaded_file = None  # Initialize uploaded_file to None
             st.session_state.prompt = None
@@ -48,7 +49,7 @@ class Streamlit_Upload_App:
     def _initalize_page_navigation(self, page_navigation=None):
         if page_navigation is None:
             st.sidebar.title("DocuMate Navigation")
-            st.sidebar.text(f"Welcome: {repr(decoded_token['email'])}")
+            st.sidebar.text(f"Welcome: {repr(self.decoded_token['email'])}")
         # Define pages
         pages = ["DocuMate AI", "DocuMate Chatbot"]
         # Select a page
@@ -140,8 +141,8 @@ class Streamlit_Upload_App:
         if id_token:
             try:
                 # Verify the ID token
-                decoded_token = auth.verify_id_token(id_token)
-                st.session_state.user = decoded_token  # Store user information in session state
+                self.decoded_token = auth.verify_id_token(id_token)
+                st.session_state.user = self.decoded_token  # Store user information in session state
                 # st.success(f"Logged in as: {decoded_token['email']}")
             except Exception as e:
                 st.error("Invalid session. Please log in again.")
