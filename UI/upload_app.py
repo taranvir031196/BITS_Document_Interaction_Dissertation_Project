@@ -69,15 +69,12 @@ class Streamlit_Upload_App:
             st.title("DocuMate Upload")
             self.create_fileUploader_Section()
 
-        st.sidebar.button('Refresh')
-             # Refresh button
-        if st.sidebar.button('Refresh'):
+        # Refresh button with a unique key
+        if st.sidebar.button('Refresh', key='refresh_button'):
             st.experimental_rerun()  # Refresh the app
-
-        st.sidebar.button('Logout')
-       
-        # Logout button
-        if st.sidebar.button('Logout'):
+            
+        # Logout button with a unique key
+        if st.sidebar.button('Logout', key='logout_button'):
             self._logout_user()
 
 
