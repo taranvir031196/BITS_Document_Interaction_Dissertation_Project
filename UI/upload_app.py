@@ -86,8 +86,8 @@ class Streamlit_Upload_App:
         st.sidebar.text(f"{repr(self.decoded_token['email'])}")
 
         if st.sidebar.button("Logout"):
-            for key in list(st.session_state.keys()):
-                del st.session_state[key]
+            for key in list(st.st.session_state.user.keys()):
+                del st.st.session_state.user[key]
             st.experimental_rerun()  # Refresh the app to reflect logout
 
         # if logout_clicked:
