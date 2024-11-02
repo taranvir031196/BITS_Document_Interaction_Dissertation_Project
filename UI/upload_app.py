@@ -95,7 +95,7 @@ class Streamlit_Upload_App:
                     window.location.href = '{login_url}';
                 </script>
                 """
-            st.components.v2.html(js)
+            st.components.v1.html(js)
 
         # if logout_clicked:
         #     for key in list(st.session_state.keys()):
