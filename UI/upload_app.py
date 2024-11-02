@@ -48,8 +48,6 @@ class Streamlit_Upload_App:
     
     def _initalize_page_navigation(self, page_navigation=None):
         if page_navigation is None:
-            st.sidebar.title(f"Welcome:")
-            st.sidebar.text(f"{repr(self.decoded_token['email'])}")
             st.sidebar.title("DocuMate Navigation")
         # Define pages
         pages = ["DocuMate AI", "DocuMate Chatbot"]
@@ -83,6 +81,9 @@ class Streamlit_Upload_App:
             '<button class="custom-button-logout">Logout</button>',
             unsafe_allow_html=True
         )
+
+        st.sidebar.title(f"User:")
+        st.sidebar.text(f"{repr(self.decoded_token['email'])}")
 
         # if logout_clicked:
         #     for key in list(st.session_state.keys()):
