@@ -82,11 +82,8 @@ class Streamlit_Upload_App:
         if st.sidebar.button("Logout"):
             for key in list(st.session_state.user.keys()):
                 del st.session_state.user[key]
-            # Local development URL with port
-            login_url = "https://documate-ai.web.app/"  # Adjust port number as needed
-
-            # This will change the current page URL to the login_url
-            st.experimental_set_query_params(next=login_url)
+            login_url = "https://documate-ai.web.app/"
+            st.markdown(f'<meta http-equiv="refresh" content="0; url={login_url}">', unsafe_allow_html=True)
         
             # Custom styled buttons with HTML and CSS
         st.sidebar.markdown(
