@@ -68,8 +68,12 @@ class Streamlit_Upload_App:
             st.session_state.page = 'DocuMate Chatbot'
             st.title("DocuMate Upload")
             self.create_fileUploader_Section()
-        st.button('Refresh')       
-        st.button('Logout')     
+            # Refresh button
+        if st.sidebar.button('Refresh'):
+            st.experimental_rerun()  # Refresh the app
+        # Logout button
+        if st.sidebar.button('Logout'):
+            self._logout_user()
 
 
     # Custom function to set page config and apply custom CSS
