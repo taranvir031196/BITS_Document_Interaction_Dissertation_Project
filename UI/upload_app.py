@@ -27,6 +27,8 @@ class Streamlit_Upload_App:
             firebase_admin.initialize_app(cred, {
                 'storageBucket': 'documate-ai.appspot.com'  # Replace with your storage bucket
         })
+        self.set_page_config()
+        self._initalize_page_navigation()
         # Get the token from the URL
         query_params = st.experimental_get_query_params()
         id_token = query_params.get("token", [None])[0]
@@ -42,8 +44,6 @@ class Streamlit_Upload_App:
         else:
             st.warning("No session token found. Please log in via DocuMate Login.")
             st.stop()
-        self.set_page_config()
-        self._initalize_page_navigation()
 
     # Function to upload file to Firebase
     def upload_to_firebase(self, uploaded_file):
@@ -96,10 +96,10 @@ class Streamlit_Upload_App:
             unsafe_allow_html=True
         )
 
-        # if logout_clicked:
-        #     for key in list(st.session_state.keys()):
-        #             del st.session_state[key]
-        #     st.experimental_rerun()
+        if logout_clicked:
+            for key in list(st.session_state.keys()):
+                    del st.session_state[key]
+            st.experimental_rerun()
         
             # Custom styled buttons with HTML and CSS
         st.sidebar.markdown(
