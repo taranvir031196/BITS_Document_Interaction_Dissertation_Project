@@ -269,10 +269,10 @@ class Streamlit_Upload_App:
                 st.title("DocuMate Chatbot")
                 self.process_document(blob.public_url)
         else:
-            # uploaded_file = st.session_state.uploaded_file
             if 'blob_URL' in st.session_state:
                 st.success("File already uploaded.")
                 st.title("DocuMate Chatbot")
+                st.session_state.chunks=None
                 self.createAndOpenChatbot(st.session_state.blob_URL)            
             # Display the uploaded file
         # else:
