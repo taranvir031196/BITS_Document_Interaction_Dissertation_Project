@@ -69,12 +69,6 @@ class Streamlit_Upload_App:
             st.session_state.page = 'DocuMate Chatbot'
             st.title("DocuMate Upload")
             self.create_fileUploader_Section()
-
-        # Create the Refresh button
-        refresh_clicked = st.sidebar.markdown(
-            '<button class="custom-button" onclick="window.location.reload();">Refresh</button>',
-            unsafe_allow_html=True
-        )
             
         # Create the Logout button
         logout_clicked = st.sidebar.markdown(
