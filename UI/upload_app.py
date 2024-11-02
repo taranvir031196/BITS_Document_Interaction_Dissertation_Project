@@ -81,10 +81,10 @@ class Streamlit_Upload_App:
             unsafe_allow_html=True
         )
 
-        if logout_clicked:
-            for key in list(st.session_state.keys()):
-                    del st.session_state[key]
-            st.experimental_rerun()
+        # if logout_clicked:
+        #     for key in list(st.session_state.keys()):
+        #             del st.session_state[key]
+        #     st.experimental_rerun()
         
             # Custom styled buttons with HTML and CSS
         st.sidebar.markdown(
