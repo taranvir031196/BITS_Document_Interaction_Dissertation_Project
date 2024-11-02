@@ -69,13 +69,17 @@ class Streamlit_Upload_App:
             st.title("DocuMate Upload")
             self.create_fileUploader_Section()
 
-        # Refresh button with a unique key
-        if st.sidebar.button('Refresh', key='refresh_button'):
-            st.experimental_rerun()  # Refresh the app
+        # Create the Refresh button
+        refresh_clicked = st.sidebar.markdown(
+            '<button class="custom-button" onclick="window.location.reload();">Refresh</button>',
+            unsafe_allow_html=True
+        )
             
-        # Logout button with a unique key
-        if st.sidebar.button('Logout', key='logout_button'):
-            self._logout_user()
+        # Create the Logout button
+        logout_clicked = st.sidebar.markdown(
+            '<button class="custom-button-logout">Logout</button>',
+            unsafe_allow_html=True
+        )
         
             # Custom styled buttons with HTML and CSS
         st.sidebar.markdown(
@@ -97,14 +101,24 @@ class Streamlit_Upload_App:
             .custom-button:hover {
                 background-color: #006699;
             }
+            .custom-button-logout {
+                background-color: ##FF0000;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                display: inline-block;
+                font-size: 16px;
+                margin: 5px 2px;
+                cursor: pointer;
+                width: 100%;
+                border-radius: 5px;
+            }
+            .custom-button-logout:hover {
+                background-color: #006699;
+            }
             </style>
             """, unsafe_allow_html=True
-        )
-
-        # Create the Refresh button
-        refresh_clicked = st.sidebar.markdown(
-            '<button class="custom-button" onclick="window.location.reload();">Refresh</button>',
-            unsafe_allow_html=True
         )
 
     # Custom function to set page config and apply custom CSS
