@@ -88,14 +88,14 @@ class Streamlit_Upload_App:
         if st.sidebar.button("Logout"):
             for key in list(st.session_state.user.keys()):
                 del st.session_state.user[key]
-            # Local development URL with port
-            login_url = "https://documate-ai.web.app/"  # Adjust port number as needed
-            js = f"""
-                <script>
-                    window.location.href = '{login_url}';
-                </script>
-                """
-            st.components.v1.html(js)
+        # Local development URL with port
+        login_url = "https://documate-ai.web.app/"  # Adjust port number as needed
+        js = f"""
+            <script>
+                window.location.href = '{login_url}';
+            </script>
+             """
+        st.components.v1.html(js)
 
         # if logout_clicked:
         #     for key in list(st.session_state.keys()):
