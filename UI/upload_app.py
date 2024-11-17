@@ -2,6 +2,7 @@ from evaluate_answer_GPT.gpt_evaluator import GPT_Evaluator
 from document_processor.pdf_processor import RAG
 import json
 import streamlit as st
+from evaluate_answer_GPT.novel_gpt_evaluator import NovelRAGEvaluator
 import firebase_admin
 from firebase_admin import credentials, storage, auth
 import time
@@ -13,6 +14,7 @@ class Streamlit_Upload_App:
         # if 'rag' not in st.session_state and 'prompt' not in st.session_state:
         self.rag = None
         self.gpt_Evaluator = None
+        self.novel_gpt_evaluator = None
         self.prompt = None
         self.rag_initialized = False  # New flag to track RAG initialization
         self.decoded_token = None
@@ -424,6 +426,7 @@ class Streamlit_Upload_App:
             self.rag.set_chat_history(max_token_limit=3097)
 
         self.gpt_Evaluator = GPT_Evaluator()
+        self.novel_gpt_evaluator = NovelRAGEvaluator()
         # Initialize chat history
         if "messages" not in st.session_state:
             st.session_state.messages = []
@@ -462,7 +465,10 @@ class Streamlit_Upload_App:
                 excerpt = self.rag.get_relevant_excerpt(st.session_state.retriever, self.prompt)
 
                 # Evaluate the answer
-                evaluation = self.gpt_Evaluator.evaluate_RAG_Response(excerpt, self.prompt, response)
+                # evaluation = self.gpt_Evaluator.evaluate_RAG_Response(excerpt, self.prompt, response)
+
+                #Evaluation based on novel evaluator approach
+                evaluation = self.novel_gpt_Evaluator.evaluate_rag(self.prompt, excerpt, response)
 
                 with st.expander("View Answer Evaluation"):
                     st.markdown(evaluation)
