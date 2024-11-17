@@ -426,7 +426,7 @@ class Streamlit_Upload_App:
             self.rag.set_chat_history(max_token_limit=3097)
 
         self.gpt_Evaluator = GPT_Evaluator()
-        self.novel_gpt_evaluator = NovelRAGEvaluator()
+        self.novel_gpt_evaluator = NovelRAGEvaluator('gpt-4', 'text-embedding-ada-002')
         # Initialize chat history
         if "messages" not in st.session_state:
             st.session_state.messages = []
