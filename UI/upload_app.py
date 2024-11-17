@@ -409,8 +409,11 @@ class Streamlit_Upload_App:
                 print("RAG instance initialized.")
             else:
                 print("RAG instance already exists.")
-                st.write("RAG instance already exists.")
+                # st.write("RAG instance already exists.")
                 # print(st.session_state.chunks)
+                st.session_state.chunks = self.rag.get_uploaded_doc(uploaded_file)
+                st.session_state.retriever = self.rag.set_retriever(st.session_state.chunks, k=1)
+                st.session_state.chat_history = self.rag.set_chat_history(max_token_limit=3097)
             
             self.initialize_ChatHistoryAndChatInterface()
     
