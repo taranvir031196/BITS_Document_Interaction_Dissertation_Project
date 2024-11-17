@@ -1,7 +1,6 @@
 from typing import List, Dict, Tuple
 import numpy as np
 from dataclasses import dataclass
-from sklearn.metrics.pairwise import cosine_similarity
 
 @dataclass
 class RAGMetrics:
@@ -10,6 +9,26 @@ class RAGMetrics:
     hallucination_score: float
     semantic_similarity: float
     counterfactual_robustness: float
+
+def cosine_similarity(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+    """
+    Calculate cosine similarity between vectors.
+    Args:
+        a: Array of shape (n_samples_a, n_features)
+        b: Array of shape (n_samples_b, n_features)
+    Returns:
+        similarities: Array of shape (n_samples_a, n_samples_b)
+    """
+    a_norm = np.linalg.norm(a, axis=1)
+    b_norm = np.linalg.norm(b, axis=1)
+    
+    # Reshape norms to allow broadcasting
+    a_norm = a_norm.reshape(-1, 1)
+    b_norm = b_norm.reshape(-1, 1)
+    
+    # Calculate similarities
+    similarities = np.dot(a, b.T) / (np.dot(a_norm, b_norm.T) + 1e-8)
+    return similarities
 
 class NovelRAGEvaluator:
     def __init__(self, llm_evaluator, embedding_model):
@@ -31,8 +50,8 @@ class NovelRAGEvaluator:
                                     counterfactual_responses: List[str]) -> float:
         """Measure how much core meaning is preserved across counterfactual responses"""
         embeddings = self.embedding_model.encode([original_response] + counterfactual_responses)
-        similarities = cosine_similarity(embeddings)[0][1:]
-        return np.mean(similarities)
+        similarities = cosine_similarity(embeddings[0:1], embeddings[1:])
+        return float(np.mean(similarities))
     
     def detect_hallucinations(self, response: str, context: str) -> Tuple[float, List[str]]:
         """Identify potential hallucinations using contrastive learning"""
@@ -102,8 +121,11 @@ class NovelRAGEvaluator:
         counterfactual_embeddings = self.embedding_model.encode(counterfactual_contexts)
         
         # Calculate relevance score using contrastive learning principles
-        positive_similarity = cosine_similarity([query_embedding], [original_embedding])[0][0]
-        negative_similarities = cosine_similarity([query_embedding], counterfactual_embeddings)[0]
+        query_embedding = query_embedding.reshape(1, -1)
+        original_embedding = original_embedding.reshape(1, -1)
+        
+        positive_similarity = cosine_similarity(query_embedding, original_embedding)[0][0]
+        negative_similarities = cosine_similarity(query_embedding, counterfactual_embeddings)[0]
         
         # Use InfoNCE-like scoring
         relevance_score = positive_similarity / (positive_similarity + np.mean(negative_similarities))
@@ -123,7 +145,10 @@ class NovelRAGEvaluator:
                             counterfactual_responses: List[str]) -> float:
         """Calculate how robust the response is to counterfactual changes"""
         embeddings = self.embedding_model.encode([original_response] + counterfactual_responses)
-        similarities = cosine_similarity(embeddings)[0][1:]
+        original_embedding = embeddings[0:1]
+        counterfactual_embeddings = embeddings[1:]
+        
+        similarities = cosine_similarity(original_embedding, counterfactual_embeddings)[0]
         
         # A lower similarity to counterfactuals indicates higher robustness
-        return 1.0 - np.mean(similarities)
+        return 1.0 - float(np.mean(similarities))
