@@ -426,7 +426,7 @@ class Streamlit_Upload_App:
             self.rag.set_chat_history(max_token_limit=3097)
 
         self.gpt_Evaluator = GPT_Evaluator()
-        self.novel_gpt_evaluator = NovelRAGEvaluator('gpt-4', 'text-embedding-ada-002')
+        # self.novel_gpt_evaluator = NovelRAGEvaluator('gpt-4', 'text-embedding-ada-002')
         # Initialize chat history
         if "messages" not in st.session_state:
             st.session_state.messages = []
@@ -465,10 +465,10 @@ class Streamlit_Upload_App:
                 excerpt = self.rag.get_relevant_excerpt(st.session_state.retriever, self.prompt)
 
                 # Evaluate the answer
-                # evaluation = self.gpt_Evaluator.evaluate_RAG_Response(excerpt, self.prompt, response)
+                evaluation = self.gpt_Evaluator.evaluate_RAG_Response(excerpt, self.prompt, response)
 
                 #Evaluation based on novel evaluator approach
-                evaluation = self.novel_gpt_Evaluator.evaluate_rag(self.prompt, excerpt, response)
+                # evaluation = self.novel_gpt_Evaluator.evaluate_rag(self.prompt, excerpt, response)
 
                 with st.expander("View Answer Evaluation"):
                     st.markdown(evaluation)
