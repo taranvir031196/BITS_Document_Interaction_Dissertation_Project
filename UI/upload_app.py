@@ -77,7 +77,7 @@ class Streamlit_Upload_App:
         #     '<button class="custom-button-logout">Logout</button>',
         #     unsafe_allow_html=True
         # )
-
+        st.markdown('<div class="User-section">', unsafe_allow_html=True)
         st.sidebar.title(f"User:")
         st.sidebar.text(f"{repr(self.decoded_token['email'])}")
 
@@ -91,6 +91,8 @@ class Streamlit_Upload_App:
                 </script>
                 """
             st.components.v1.html(js, height=0)
+
+        st.markdown('</div>', unsafe_allow_html=True)
             # login_url = "https://documate-ai.web.app/"
             # st.markdown(f'<meta http-equiv="refresh" content="0; url={login_url}">', unsafe_allow_html=True)
             
