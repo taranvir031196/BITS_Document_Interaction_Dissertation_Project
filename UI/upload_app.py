@@ -473,6 +473,7 @@ class Streamlit_Upload_App:
                 # evaluation = self.novel_gpt_Evaluator.evaluate_rag(self.prompt, excerpt, response)
 
                 with st.expander("View Answer Evaluation"):
+                    st.write(excerpt)
                     st.markdown(evaluation)
 
                 # Optionally, you can store the evaluation in the session state
