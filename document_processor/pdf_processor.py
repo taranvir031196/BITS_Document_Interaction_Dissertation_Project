@@ -66,6 +66,8 @@ class RAG:
             # index = pinecone.Index(index_name)
             pc = pinecone.Pinecone(api_key=PINECONE_API_KEY)
             # List existing indexes
+            # Get index instance
+            index = pc.Index(index_name)
             # existing_indexes = pinecone.list_indexes()
             # existing_indexes = [idx.name for idx in pinecone.list_indexes()]
             
@@ -81,7 +83,7 @@ class RAG:
             embeddings = OpenAIEmbeddings()
             # st.write(f"embeddings initialized properly: {embeddings}")
             store_vector = LangchainPinecone(
-                index_name=index_name,
+                index_name=index,
                 embedding=embeddings,
                 namespace="default"   # Replace with your Pinecone index name
             )
