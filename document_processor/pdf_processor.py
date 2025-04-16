@@ -2,7 +2,6 @@ __import__('pysqlite3')
 import sys
 import os
 import streamlit as st
-import pinecone
 from dotenv import load_dotenv
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 load_dotenv(encoding="utf-8")
@@ -16,13 +15,10 @@ from langchain.memory import ConversationTokenBufferMemory
 from langchain_openai.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader 
 from langchain_openai.embeddings import OpenAIEmbeddings
-from langchain.vectorstores.milvus import Milvus
-from langchain.vectorstores.chroma import Chroma
-from langchain.vectorstores import Pinecone as LangchainPinecone  # Note this import
+from langchain.vectorstores import Pinecone
 from langchain_core.prompts import MessagesPlaceholder
-from langchain.vectorstores.faiss import FAISS
 from typing import List, Dict, Any
-from milvus import default_server as milvus_server
+import pinecone
 
 class RAG:
     def __init__(self, 
@@ -37,7 +33,6 @@ class RAG:
     
     def get_uploaded_doc(self, doc_path: str) -> List[Document]:
         print("Fetching Uploaded Doc")
-        global pages
         loader = PyPDFLoader(doc_path)
         pages = loader.load()
         # Improved text splitting
@@ -51,47 +46,45 @@ class RAG:
         return chunks
     
     def set_retriever(self, chunks: List[Document], k: int = 1):
-        sharing_mode = st.secrets["STREAMLIT_SHARING_MODE"]
-        store_vector = None  # or appropriate default value
+        store_vector = None
                  
         try:
-            # Initialize Pinecone
             # Access secrets
             PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"].strip()
             PINECONE_ENVIRONMENT = st.secrets["ENVIRONMENT"]
-            # pc = Pinecone(api_key=PINECONE_API_KEY)
             index_name = 'streamlit-index'
-            # Initialize Pinecone
-            # pinecone.init(api_key=PINECONE_API_KEY)
-            # index = pinecone.Index(index_name)
-            pc = pinecone.Pinecone(api_key=PINECONE_API_KEY)
-            # List existing indexes
-            # Get index instance
-            index = pc.Index(index_name)
-            # existing_indexes = pinecone.list_indexes()
-            # existing_indexes = [idx.name for idx in pinecone.list_indexes()]
             
-            # Check and create index if needed
-            if index_name not in pc.list_indexes().names():
+            # Initialize Pinecone
+            pc = pinecone.Pinecone(api_key=PINECONE_API_KEY)
+            
+            # Check if index exists, if not create it
+            index_list = pc.list_indexes().names()
+            if index_name not in index_list:
                 pc.create_index(
                     name=index_name,
                     dimension=1536,  # OpenAI embeddings dimension
                     metric='cosine'
                 )
                 st.write(f"Created new Pinecone index: {index_name}")
-            # Using Chroma Vector Store
+            
+            # Get index instance
+            index = pc.Index(index_name)
+            
+            # Initialize OpenAI embeddings
             embeddings = OpenAIEmbeddings()
-            # st.write(f"embeddings initialized properly: {embeddings}")
-            store_vector = LangchainPinecone(
+            
+            # Create LangChain Pinecone vectorstore
+            namespace = "default"
+            store_vector = Pinecone(
                 index=index,
                 embedding=embeddings,
-                text_key="text",  # Make sure this matches your schema
-                namespace="default"   # Replace with your Pinecone index name
+                text_key="text"
             )
+            
+            # Add documents to the vector store
             store_vector.add_documents(chunks)
-            # st.write("chunks stored to vector store")
-
-            # Self-Querying Retriever
+    
+            # Set up SelfQueryRetriever
             metadata_field_info = [
                 AttributeInfo(
                     name="source",
@@ -102,23 +95,25 @@ class RAG:
     
             document_content_description = "Uploaded_Interaction_Document"
     
-            # return retriever
-            _retriever = SelfQueryRetriever.from_llm(
+            # Create and return retriever
+            retriever = SelfQueryRetriever.from_llm(
                 self.__model,
                 store_vector,
                 document_content_description,
                 metadata_field_info,
                 search_kwargs={"k": k}
             )
-            # st.write("_retriever set properly")
-            return _retriever
+            
+            return retriever
+            
         except Exception as e:
-            st.error(f"Connection error occurred: {str(e)}")
-            # Add logging if needed
+            st.error(f"Pinecone connection error: {str(e)}")
             print(f"Error details: {e}")
-            store_vector = None  # or appropriate default value
+            return None
     
     def get_relevant_excerpt(self, retriever, query):
+        if retriever is None:
+            return "No retriever available. Please check your vector store connection."
         docs = retriever.get_relevant_documents(query)
         return " ".join([doc.page_content for doc in docs])
     
@@ -127,6 +122,8 @@ class RAG:
     
     #PUBLIC RESPONSE METHOD
     def get_response(self, question: str, retriever: any, chat_history: any) -> str:
+        if retriever is None:
+            return "I'm sorry, but I couldn't connect to the knowledge base. Please check your Pinecone configuration and try again."
 
         prompt = ChatPromptTemplate.from_messages([
             ("system", "You are an assistant responsible for answering questions about documents. Respond to the user's question with a reasonable level of detail based on the following context document(s):\n\n{context}"),
@@ -137,12 +134,17 @@ class RAG:
         output_parser = StrOutputParser()
         chain = prompt | self.__model | output_parser
 
-        answer = chain.invoke({
-            "input": question,
-            "chat_history": chat_history.load_memory_variables({})['history'],
-            "context": retriever.invoke(question)
-        })
-
-        chat_history.save_context({"input": question}, {"output": answer})
-        return answer
-
+        try:
+            context = retriever.invoke(question)
+            answer = chain.invoke({
+                "input": question,
+                "chat_history": chat_history.load_memory_variables({})['history'],
+                "context": context
+            })
+            
+            chat_history.save_context({"input": question}, {"output": answer})
+            return answer
+        except Exception as e:
+            error_msg = f"Error getting response: {str(e)}"
+            print(error_msg)
+            return f"I encountered an error while processing your question. Please try again or check your configuration. Error: {str(e)}"
