@@ -64,7 +64,7 @@ class RAG:
             # Initialize Pinecone
             # pinecone.init(api_key=PINECONE_API_KEY)
             # index = pinecone.Index(index_name)
-            pc = pinecone(api_key=PINECONE_API_KEY)
+            pc = pinecone.Pinecone(api_key=PINECONE_API_KEY)
             # List existing indexes
             # existing_indexes = pinecone.list_indexes()
             # existing_indexes = [idx.name for idx in pinecone.list_indexes()]
