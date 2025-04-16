@@ -83,7 +83,7 @@ class RAG:
             embeddings = OpenAIEmbeddings()
             # st.write(f"embeddings initialized properly: {embeddings}")
             store_vector = LangchainPinecone(
-                index_name=index,
+                index=index,
                 embedding=embeddings,
                 namespace="default"   # Replace with your Pinecone index name
             )
