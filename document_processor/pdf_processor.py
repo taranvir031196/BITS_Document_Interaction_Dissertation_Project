@@ -2,7 +2,7 @@ __import__('pysqlite3')
 import sys
 import os
 import streamlit as st
-from pinecone import Pinecone
+import pinecone
 from dotenv import load_dotenv
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 load_dotenv(encoding="utf-8")
@@ -64,7 +64,7 @@ class RAG:
             # Initialize Pinecone
             # pinecone.init(api_key=PINECONE_API_KEY)
             # index = pinecone.Index(index_name)
-            pc = Pinecone(api_key=PINECONE_API_KEY)
+            pc = pinecone(api_key=PINECONE_API_KEY)
             # List existing indexes
             # existing_indexes = pinecone.list_indexes()
             # existing_indexes = [idx.name for idx in pinecone.list_indexes()]
