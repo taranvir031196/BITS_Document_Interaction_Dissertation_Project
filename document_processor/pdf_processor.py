@@ -63,18 +63,19 @@ class RAG:
             index_name = 'streamlit-index'
             # Initialize Pinecone
             pinecone.init(api_key=PINECONE_API_KEY)
+            index = pinecone.Index(index_name)
             # List existing indexes
             # existing_indexes = pinecone.list_indexes()
-            existing_indexes = [idx.name for idx in pinecone.list_indexes()]
+            # existing_indexes = [idx.name for idx in pinecone.list_indexes()]
             
             # Check and create index if needed
-            if index_name not in existing_indexes:
-                pinecone.create_index(
-                    name=index_name,
-                    dimension=1536,  # OpenAI embeddings dimension
-                    metric='cosine'
-                )
-                st.write(f"Created new Pinecone index: {index_name}")
+            # if index_name not in existing_indexes:
+            #     pinecone.create_index(
+            #         name=index_name,
+            #         dimension=1536,  # OpenAI embeddings dimension
+            #         metric='cosine'
+            #     )
+            #     st.write(f"Created new Pinecone index: {index_name}")
             # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
             # st.write(f"embeddings initialized properly: {embeddings}")
