@@ -62,7 +62,7 @@ class RAG:
             # pc = Pinecone(api_key=PINECONE_API_KEY)
             index_name = 'streamlit-index'
             # Initialize Pinecone
-            pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
+            pinecone.init(api_key=PINECONE_API_KEY)
             # List existing indexes
             existing_indexes = pinecone.list_indexes().names()
             
