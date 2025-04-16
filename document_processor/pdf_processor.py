@@ -65,7 +65,7 @@ class RAG:
             pinecone.init(api_key=PINECONE_API_KEY)
             # List existing indexes
             # existing_indexes = pinecone.list_indexes()
-            existing_indexes = [idx.name for idx in pc.list_indexes()]
+            existing_indexes = [idx.name for idx in pinecone.list_indexes()]
             
             # Check and create index if needed
             if index_name not in existing_indexes:
