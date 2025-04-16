@@ -80,7 +80,7 @@ class RAG:
             # Using Chroma Vector Store
             embeddings = OpenAIEmbeddings()
             # st.write(f"embeddings initialized properly: {embeddings}")
-            store_vector = LangchainPinecone.from_existing_index(
+            store_vector = LangchainPinecone(
                 index_name=index_name,
                 embedding=embeddings,
                 namespace="default"   # Replace with your Pinecone index name
