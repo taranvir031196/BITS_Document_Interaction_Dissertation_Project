@@ -2,7 +2,7 @@ __import__('pysqlite3')
 import sys
 import os
 import streamlit as st
-from pinecone import Pinecone
+import pinecone
 from dotenv import load_dotenv
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 load_dotenv(encoding="utf-8")
@@ -59,12 +59,16 @@ class RAG:
             # Access secrets
             PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"].strip()
             PINECONE_ENVIRONMENT = st.secrets["ENVIRONMENT"]
-            pc = Pinecone(api_key=PINECONE_API_KEY)
+            # pc = Pinecone(api_key=PINECONE_API_KEY)
             index_name = 'streamlit-index'
+            # Initialize Pinecone
+            pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
+            # List existing indexes
+            existing_indexes = pinecone.list_indexes()
             
             # Check and create index if needed
-            if index_name not in pc.list_indexes().names():
-                pc.create_index(
+            if index_name not in existing_indexes:
+                pinecone.create_index(
                     name=index_name,
                     dimension=1536,  # OpenAI embeddings dimension
                     metric='cosine'
