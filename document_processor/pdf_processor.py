@@ -85,6 +85,7 @@ class RAG:
             store_vector = LangchainPinecone(
                 index=index,
                 embedding=embeddings,
+                text_key="text",  # Make sure this matches your schema
                 namespace="default"   # Replace with your Pinecone index name
             )
             store_vector.add_documents(chunks)
