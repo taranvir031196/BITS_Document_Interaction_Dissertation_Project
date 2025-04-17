@@ -15,7 +15,7 @@ from langchain.memory import ConversationTokenBufferMemory
 from langchain_openai.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader 
 from langchain_openai.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import Pinecone
+from langchain_community.vectorstores.Pinecone import Pinecone
 from langchain_core.prompts import MessagesPlaceholder
 from typing import List, Dict, Any
 import pinecone
