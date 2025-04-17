@@ -46,6 +46,7 @@ class RAG:
         return chunks
     
     def set_retriever(self, chunks: List[Document], k: int = 1):
+    """Set up the retriever for document search."""
     store_vector = None
              
     try:
@@ -81,7 +82,6 @@ class RAG:
         import pkg_resources
         pinecone_version = pkg_resources.get_distribution("pinecone-client").version
         major_version = int(pinecone_version.split('.')[0])
-
         if major_version >= 2:
             # For Pinecone v2.x client
             # Convert to the legacy format expected by LangChain
@@ -103,7 +103,6 @@ class RAG:
         
         # Add documents to the vector store
         store_vector.add_documents(chunks)
-
         # Set up SelfQueryRetriever
         metadata_field_info = [
             AttributeInfo(
@@ -112,9 +111,7 @@ class RAG:
                 type="string",
             ),
         ]
-
         document_content_description = "Uploaded_Interaction_Document"
-
         # Create and return retriever
         retriever = SelfQueryRetriever.from_llm(
             self.__model,
