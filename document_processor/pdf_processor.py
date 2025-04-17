@@ -46,87 +46,87 @@ class RAG:
         return chunks
     
     def set_retriever(self, chunks: List[Document], k: int = 1):
-    """Set up the retriever for document search."""
-    store_vector = None
-             
-    try:
-        # Access secrets
-        PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"].strip()
-        PINECONE_ENVIRONMENT = st.secrets["ENVIRONMENT"]
-        index_name = 'streamlit-index'
-        
-        # Initialize Pinecone
-        pc = pinecone.Pinecone(api_key=PINECONE_API_KEY)
-        
-        # Check if index exists, if not create it
-        index_list = pc.list_indexes().names()
-        if index_name not in index_list:
-            pc.create_index(
-                name=index_name,
-                dimension=1536,  # OpenAI embeddings dimension
-                metric='cosine'
-            )
-            st.write(f"Created new Pinecone index: {index_name}")
-        
-        # Get index instance - this is the key part that needs to change
-        index = pc.Index(index_name)
-        
-        # Initialize OpenAI embeddings
-        embeddings = OpenAIEmbeddings()
-        
-        # Create LangChain Pinecone vectorstore - UPDATED THIS PART
-        # langchain-pinecone expects a different Index format
-        from pinecone import Index as PineconeIndex
-        
-        # Import needed for handling different Pinecone client versions
-        import pkg_resources
-        pinecone_version = pkg_resources.get_distribution("pinecone-client").version
-        major_version = int(pinecone_version.split('.')[0])
-        if major_version >= 2:
-            # For Pinecone v2.x client
-            # Convert to the legacy format expected by LangChain
-            index_for_langchain = {
-                "api_key": PINECONE_API_KEY,
-                "environment": PINECONE_ENVIRONMENT,
-                "index_name": index_name
-            }
-        else:
-            # For Pinecone v1.x client
-            index_for_langchain = index
+        """Set up the retriever for document search."""
+        store_vector = None
+                 
+        try:
+            # Access secrets
+            PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"].strip()
+            PINECONE_ENVIRONMENT = st.secrets["ENVIRONMENT"]
+            index_name = 'streamlit-index'
             
-        # Create the vector store with the appropriate index format
-        store_vector = Pinecone.from_existing_index(
-            index_name=index_name,
-            embedding=embeddings,
-            text_key="text"
-        )
-        
-        # Add documents to the vector store
-        store_vector.add_documents(chunks)
-        # Set up SelfQueryRetriever
-        metadata_field_info = [
-            AttributeInfo(
-                name="source",
-                description="The path of directories where the document is found",
-                type="string",
-            ),
-        ]
-        document_content_description = "Uploaded_Interaction_Document"
-        # Create and return retriever
-        retriever = SelfQueryRetriever.from_llm(
-            self.__model,
-            store_vector,
-            document_content_description,
-            metadata_field_info,
-            search_kwargs={"k": k}
-        )
-        
-        return retriever
-        
-    except Exception as e:
-        st.error(f"Pinecone connection error: {str(e)}")
-        print(f"Error details: {e}")
-        return None
+            # Initialize Pinecone
+            pc = pinecone.Pinecone(api_key=PINECONE_API_KEY)
+            
+            # Check if index exists, if not create it
+            index_list = pc.list_indexes().names()
+            if index_name not in index_list:
+                pc.create_index(
+                    name=index_name,
+                    dimension=1536,  # OpenAI embeddings dimension
+                    metric='cosine'
+                )
+                st.write(f"Created new Pinecone index: {index_name}")
+            
+            # Get index instance - this is the key part that needs to change
+            index = pc.Index(index_name)
+            
+            # Initialize OpenAI embeddings
+            embeddings = OpenAIEmbeddings()
+            
+            # Create LangChain Pinecone vectorstore - UPDATED THIS PART
+            # langchain-pinecone expects a different Index format
+            from pinecone import Index as PineconeIndex
+            
+            # Import needed for handling different Pinecone client versions
+            import pkg_resources
+            pinecone_version = pkg_resources.get_distribution("pinecone-client").version
+            major_version = int(pinecone_version.split('.')[0])
+            if major_version >= 2:
+                # For Pinecone v2.x client
+                # Convert to the legacy format expected by LangChain
+                index_for_langchain = {
+                    "api_key": PINECONE_API_KEY,
+                    "environment": PINECONE_ENVIRONMENT,
+                    "index_name": index_name
+                }
+            else:
+                # For Pinecone v1.x client
+                index_for_langchain = index
+                
+            # Create the vector store with the appropriate index format
+            store_vector = Pinecone.from_existing_index(
+                index_name=index_name,
+                embedding=embeddings,
+                text_key="text"
+            )
+            
+            # Add documents to the vector store
+            store_vector.add_documents(chunks)
+            # Set up SelfQueryRetriever
+            metadata_field_info = [
+                AttributeInfo(
+                    name="source",
+                    description="The path of directories where the document is found",
+                    type="string",
+                ),
+            ]
+            document_content_description = "Uploaded_Interaction_Document"
+            # Create and return retriever
+            retriever = SelfQueryRetriever.from_llm(
+                self.__model,
+                store_vector,
+                document_content_description,
+                metadata_field_info,
+                search_kwargs={"k": k}
+            )
+            
+            return retriever
+            
+        except Exception as e:
+            st.error(f"Pinecone connection error: {str(e)}")
+            print(f"Error details: {e}")
+            return None
     
     def get_relevant_excerpt(self, retriever, query):
         if retriever is None:
